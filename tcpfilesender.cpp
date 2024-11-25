@@ -16,12 +16,12 @@ TcpFileSender::TcpFileSender(QWidget *parent)
     clientStatusLabel = new QLabel(QStringLiteral("客戶端就緒"));
     openbtn = new QPushButton(QStringLiteral("開檔"));
     startBtn = new QPushButton(QStringLiteral("開始"));
-    quitbtn = new QPushButton(QStringLiteral("退出"));
+    //quitbtn = new QPushButton(QStringLiteral("退出"));
     startBtn->setEnabled(false);
     btnbox = new QDialogButtonBox;
     btnbox->addButton(startBtn, QDialogButtonBox::ActionRole);
     btnbox->addButton(openbtn, QDialogButtonBox::ActionRole);
-    btnbox->addButton(quitbtn, QDialogButtonBox::RejectRole);
+    //btnbox->addButton(quitbtn, QDialogButtonBox::RejectRole);
 
     QVBoxLayout *mainlay = new QVBoxLayout;
 
@@ -44,7 +44,7 @@ TcpFileSender::TcpFileSender(QWidget *parent)
     connect(startBtn, SIGNAL(clicked()), this, SLOT(start()));
     connect(&tcpClient, SIGNAL(connected()), this, SLOT(startTransfer()));
     connect(&tcpClient, SIGNAL(bytesWritten(qint64)), this, SLOT(updateClientProgress(qint64)));
-    connect(quitbtn, SIGNAL(clicked()), this, SLOT(close()));
+    //connect(quitbtn, SIGNAL(clicked()), this, SLOT(close()));
     connect(editAddr, SIGNAL(textChanged(QString)), this, SLOT(updateDest()));
     connect(editport, SIGNAL(textChanged(QString)), this, SLOT(updateDest()));
 }

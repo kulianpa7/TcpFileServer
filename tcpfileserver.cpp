@@ -13,14 +13,14 @@ TcpFileServer::TcpFileServer(QWidget *parent)
     serverProgressBar = new QProgressBar;
     serverStatusLabel = new QLabel(QStringLiteral("伺服器端就緒"));
     startButton = new QPushButton(QStringLiteral("接收"));
-    quitButton = new QPushButton(QStringLiteral("退出"));
+    //quitButton = new QPushButton(QStringLiteral("退出"));
     listenIP = new QLabel(QStringLiteral("監聽IP: "));
     editIP = new QLineEdit;
     listenport = new QLabel(QStringLiteral("監聽PORT"));
     editport = new QLineEdit;
     buttonBox = new QDialogButtonBox;
     buttonBox->addButton(startButton, QDialogButtonBox::ActionRole);
-    buttonBox->addButton(quitButton, QDialogButtonBox::RejectRole);
+    //buttonBox->addButton(quitButton, QDialogButtonBox::RejectRole);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -35,7 +35,7 @@ TcpFileServer::TcpFileServer(QWidget *parent)
     setLayout(mainLayout);
     setWindowTitle(QStringLiteral("接收檔案"));
     connect(startButton, SIGNAL(clicked()), this, SLOT(start()));
-    connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
+    //connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
     connect(&tcpServer,
             SIGNAL(acceptError(QAbstractSocket::SocketError)),
