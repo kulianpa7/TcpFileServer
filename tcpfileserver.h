@@ -17,21 +17,22 @@ public slots:
     void acceptConnection();
     void updateServerProgress();
     void displayError(QAbstractSocket::SocketError socketError);
+
 private:
-    QProgressBar     *serverProgressBar;
-    QLabel           *serverStatusLabel;
-    QPushButton      *startButton;
-    QPushButton      *quitButton;
+    QProgressBar *serverProgressBar;
+    QLabel *serverStatusLabel;
+    QPushButton *startButton;
+    QPushButton *quitButton;
     QDialogButtonBox *buttonBox;
 
-    QTcpServer       tcpServer;
-    QTcpSocket       *tcpServerConnection;
-    qint64           totalBytes;
-    qint64           byteReceived;
-    qint64           fileNameSize;
-    QString          fileName;
-    QFile            *localFile;
-    QByteArray       inBlock;
+    QTcpServer tcpServer;
+    QTcpSocket *tcpServerConnection;
+    qint64 totalBytes;
+    qint64 byteReceived;
+    qint64 fileNameSize;
+    QString fileName;
+    QFile *localFile;
+    QByteArray inBlock;
 };
 
 #endif // TCPFILESERVER_H
