@@ -13,33 +13,31 @@ public:
     TcpFileServer(QWidget *parent = 0);
     ~TcpFileServer();
 public slots:
-    void start();//<--listen (start button clicked)
-    void acceptConnection();//<--newConnection()
+    void start();
+    void acceptConnection();
     void updateServerProgress();
     void displayError(QAbstractSocket::SocketError socketError);
-    void updateIP();
-
 private:
-    QProgressBar *serverProgressBar;
-    QLabel *serverStatusLabel;
-    QPushButton *startButton;
-    QPushButton *quitButton;
+    QProgressBar     *serverProgressBar;
+    QLabel           *serverStatusLabel;
+    QPushButton      *startButton;
+    QPushButton      *quitButton;
     QDialogButtonBox *buttonBox;
-    QLabel *listenIP;
-    QLineEdit *editIP;
-    QLabel *listenport;
-    QLineEdit *editport;
-    QString tgtIP;
-    quint16 tgtport;
 
-    QTcpServer tcpServer;
-    QTcpSocket *tcpServerConnection;
-    qint64 totalBytes;
-    qint64 byteReceived;
-    qint64 fileNameSize;
-    QString fileName;
-    QFile *localFile;
-    QByteArray inBlock;
+    QTcpServer       tcpServer;
+    QTcpSocket       *tcpServerConnection;
+    qint64           totalBytes;
+    qint64           byteReceived;
+    qint64           fileNameSize;
+    QString          fileName;
+    QFile            *localFile;
+    QByteArray       inBlock;
+
+    QLabel           *ipLabel;           // 顯示 "IP" 的標籤
+    QLineEdit        *ipInput;           // 用於輸入 IP 地址
+    QLabel           *portLabel;         // 顯示 "Port" 的標籤
+    QLineEdit        *portInput;         // 用於輸入 Port
+
 };
 
 #endif // TCPFILESERVER_H
