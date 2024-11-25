@@ -13,10 +13,11 @@ public:
     TcpFileServer(QWidget *parent = 0);
     ~TcpFileServer();
 public slots:
-    void start();
-    void acceptConnection();
+    void start();//<--listen (start button clicked)
+    void acceptConnection();//<--newConnection()
     void updateServerProgress();
     void displayError(QAbstractSocket::SocketError socketError);
+    void updateIP();
 
 private:
     QProgressBar *serverProgressBar;
@@ -24,6 +25,12 @@ private:
     QPushButton *startButton;
     QPushButton *quitButton;
     QDialogButtonBox *buttonBox;
+    QLabel *listenIP;
+    QLineEdit *editIP;
+    QLabel *listenport;
+    QLineEdit *editport;
+    QString tgtIP;
+    quint16 tgtport;
 
     QTcpServer tcpServer;
     QTcpSocket *tcpServerConnection;

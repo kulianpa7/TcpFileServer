@@ -1,8 +1,12 @@
 ﻿#include "tcpfileserver.h"
 #define tr QStringLiteral
+
+QString tgtIP = "";
 TcpFileServer::TcpFileServer(QWidget *parent)
     : QDialog(parent)
 {
+    tgtIP="";
+    tgtport=0;
     totalBytes = 0;
     byteReceived = 0;
     fileNameSize = 0;
@@ -10,15 +14,24 @@ TcpFileServer::TcpFileServer(QWidget *parent)
     serverStatusLabel = new QLabel(QStringLiteral("伺服器端就緒"));
     startButton = new QPushButton(QStringLiteral("接收"));
     quitButton = new QPushButton(QStringLiteral("退出"));
+    listenIP = new QLabel(QStringLiteral("監聽IP: "));
+    editIP = new QLineEdit;
+    listenport = new QLabel(QStringLiteral("監聽PORT"));
+    editport = new QLineEdit;
     buttonBox = new QDialogButtonBox;
     buttonBox->addButton(startButton, QDialogButtonBox::ActionRole);
     buttonBox->addButton(quitButton, QDialogButtonBox::RejectRole);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+
     mainLayout->addWidget(serverProgressBar);
     mainLayout->addWidget(serverStatusLabel);
     mainLayout->addStretch();
     mainLayout->addWidget(buttonBox);
+    mainLayout->addWidget(listenIP);
+    mainLayout->addWidget(editIP);
+    mainLayout->addWidget(listenport);
+    mainLayout->addWidget(editport);
     setLayout(mainLayout);
     setWindowTitle(QStringLiteral("接收檔案"));
     connect(startButton, SIGNAL(clicked()), this, SLOT(start()));
@@ -28,6 +41,13 @@ TcpFileServer::TcpFileServer(QWidget *parent)
             SIGNAL(acceptError(QAbstractSocket::SocketError)),
             this,
             SLOT(displayError(QAbstractSocket::SocketError)));
+    connect(editIP,SIGNAL(textChanged(QString)),this,SLOT(updateIP()));
+    connect(editport,SIGNAL(textChanged(QString)),this,SLOT(updateIP()));
+}
+
+void TcpFileServer::updateIP(){
+    tgtIP = editIP->text();
+    tgtport = editport->text().toInt();
 }
 
 TcpFileServer::~TcpFileServer() {}
@@ -36,7 +56,7 @@ void TcpFileServer::start()
     startButton->setEnabled(false);
     byteReceived = 0;
     fileNameSize = 0;
-    while (!tcpServer.isListening() && !tcpServer.listen(QHostAddress::AnyIPv4, 16998)) {
+    while (!tcpServer.isListening() && !tcpServer.listen(QHostAddress(tgtIP), tgtport)) {
         QMessageBox::StandardButton ret = QMessageBox::critical(
             this,
             QStringLiteral("迴圈"),
@@ -54,17 +74,17 @@ void TcpFileServer::start()
 
 void TcpFileServer::acceptConnection()
 {
-    tcpServerConnection = tcpServer.nextPendingConnection(); //取得已接受的客戶端連線
+    tcpServerConnection = tcpServer.nextPendingConnection(); //取得已接受的客戶端連線 回傳TCP sock物件指標
     connect(tcpServerConnection,
             SIGNAL(readyRead()),
             this,
             SLOT(updateServerProgress())); //連接readyRead()訊號至updateServerProgress()槽函數
     connect(tcpServerConnection,
-            SIGNAL(error(QAbstractSocket::SocketError)),
+            SIGNAL(error(QAbstractSocket::SocketError)),//出現錯誤
             this,
             SLOT(displayError(QAbstractSocket::SocketError))); //連接error()訊號至displayError()槽函數
     serverStatusLabel->setText(QStringLiteral("接受連線"));
-    tcpServer.close(); //暫停接受客戶端連線
+    tcpServer.close(); //暫停接受客戶端連線 阻擋newconnection
 }
 
 void TcpFileServer::updateServerProgress()
